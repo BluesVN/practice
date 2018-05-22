@@ -203,3 +203,40 @@ function sqrt(n) {
   console.log("查找了" + count + "次")
   return (left + right) / 2
 }
+
+
+//完全数,因数之和相加等于本身（6=1+2+3），和优化素数一样，根号n左有一个因数，对应右边肯定有另一个，所以就不用循环n次了
+function isCompleteNum(n) {
+  var sum = 1 //一肯定是因数，先算上不用从零开始了
+  var s = Math.sqrt(n)
+  for (var i = 2; i < s; i++) {
+    if (n % i == 0) {
+      sum += i
+      sum += n / i
+    }
+  }
+  if (s % 1 === 0) {
+    sum += s
+  }
+  if (sum === n) {
+    return true
+  }
+  return false
+}
+
+
+//阶乘和排列组合
+function factorial(n) {
+  var j = 1
+  for (i = 1; i <= n; i++) {
+    j *= i
+  }
+  return j
+}
+//阶乘带入排列 和组合的公式
+function C(m, n) {
+  return factorial(m) / factorial(n) / factorial(m - n)
+}
+function A(m, n) {
+  return factorial(m) / factorial(m - n)
+}
