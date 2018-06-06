@@ -183,7 +183,7 @@ var lcf = function (a, b) {
 
 
 
-//不用Math.sqrt求非负数平方跟，二分法，折半查找。除此之外还有牛顿法（切线交点更接近与值）
+//不用Math.sqrt求非负数平方跟，二分法，折半查找。除此之外还有牛顿法（切线交点更接近与值），https://zh.wikipedia.org/wiki/%E7%89%9B%E9%A1%BF%E6%B3%95
 function sqrt(n) {
   var left = 0
   var right = n
@@ -239,4 +239,337 @@ function C(m, n) {
 }
 function A(m, n) {
   return factorial(m) / factorial(m - n)
+}
+
+
+
+// 返回最大值
+function max() {
+  var len = arguments.length, result = -Infinity
+  for (var i = 0; i < len; i++) {
+    if (result < arguments[i]) {
+      result = arguments[i]
+    }
+  }
+  return result
+}
+
+// 返回最小值
+function min() {
+  var len = arguments.length, result = Infinity
+  for (var i = 0; i < l; i++) {
+    if (result > arguments[i]) {
+      result = arguments[i]
+    }
+  }
+  return result
+}
+
+
+
+
+
+
+
+//画图理解闭包
+// function multipier(factor) { 
+//   return function (number) { 
+//     return function (zoomer) { 
+//       return zoomer * number * factor
+//     }
+//   }
+// }
+// var a = multipier(2)
+
+// var b = a(3)
+// var c = a(4)
+
+// var d = c(4)
+// var e = b(5)
+
+
+//查看fibb数列的第n项是多少，可能会爆站。递归方式还可以写前n项和,次方 ，阶乘，要确定第一项和通项公式。
+function fibb(n) {
+  if (n === 1) {
+    return 1
+  }
+  if (n === 2) {
+    return 1
+  }
+  return fibb(n - 1) + fibb(n - 2)
+}
+
+//阶乘另一种写法
+function factorial2(n) {
+  if (n === 1) {
+    return 1
+  } else {
+    return n * factorial2(n - 1)
+  }
+}
+
+//自然数列前n项和
+function fnSum(n) {
+  if (n === 1) {
+    return 1
+  } else {
+    return n + fnSum(n - 1)
+  }
+}
+//自然数列前n项和,另一种写法。
+// function fnA(n) {
+//   return n
+// }
+// function S(n) {
+//   if (n === 1) {
+//     return fnA(1)
+//   } else {
+//     return S(n - 1) + fnA(n)
+//   }
+// }
+
+
+//看代码，求最后count是多少
+// var x = 0
+// var i = -8, j = 42
+// var count = 0
+// while (x < 10) {
+//   for (i = x; i < 42; i++) {
+//     do {
+//       count++
+//       j--
+//     } while (j > 37)
+//   }
+//   x++
+// }
+// console.log(count)
+
+
+//leetcode fizzbuzz
+var fizzBuzz = function (n) {
+  var res = []
+  for (var i = 1; i <= n; i++) {
+    if (i % 3 === 0 && i % 5 === 0) {
+      res.push('FizzBuzz')
+    } else if (i % 5 === 0) {
+      res.push('Buzz')
+    } else if (i % 3 === 0) {
+      res.push('Fizz')
+    } else {
+      res.push('' + i)
+    }
+  }
+  return res
+};
+
+//非负整数，回文数字。12321
+function isPalindrome(n) {
+  var m = n
+  var reverse = 0
+  while (m > 0) {
+    var digit = m % 10
+    reverse = reverse * 10 + digit
+    m = (m - digit) / 10
+  }
+  if (reverse === n) {
+    return true
+  }
+  else {
+    return false
+  }
+}
+
+//输入年月，返回星期。只要天数算对，星期几就不会错。
+function dayOneOfMonth(year, month) {
+  //2017,11,算17年前有多少天，该年11月前有多少天。天数七天一循环，模7就是星期的规律。
+  var days
+  var years = year;//公元0年第一月第一天是星期天。
+  days = years * 365
+  days += parseInt(years / 4) - parseInt(years / 100) + parseInt(years / 400)
+  var monthDays = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+  for (var i = 0; i < month - 1; i++) {
+    if (i + 1 === 2) {
+      if (isLeapYear(year)) {
+        days += 29
+      } else {
+        days += 28
+      }
+    } else {
+      days += monthDays[i]
+    }
+  }
+  return "星期" + (days % 7)
+}
+//当年是否是闰年
+function isLeapYear(year) {
+  if (year % 400 === 0) {
+    return true
+  }
+  if (year % 100 === 0) {
+    return false
+  }
+  if (year % 4 === 0) {
+    return true
+  }
+  return false
+}
+//根据以上，可以做一下输入年份 用表格打印出本年日历
+
+
+
+//数组相关方法  ，仿标准库
+function indexOf(ary, value, start = 0) {
+  for (var i = start; i < ary.length; i++) {
+    if (ary[i] === value) {
+      return i
+    }
+  }
+  return -1
+}
+
+function lastIndexOf(ary, value, start = 0) {
+  for (var i = start; i >= 0; i--) {
+    if (ary[i] === value) {
+      return i
+    }
+  }
+  return -1
+}
+
+function slice(ary, start, end = ary.length) {
+  //数组和字符串都有slice方法
+  var res = []
+  for (var i = start; i < end; i++) {
+    res.push(ary[i])
+  }
+  return res
+}
+
+function concat(ary, ) {
+  var res = []
+  for (var i = 0; i < arguments.length; i++) {
+    console.log(arguments[i].length)
+    if (arguments[i].length >= 1) {//这里用长度来判断是否是数组可能不太保险，可以Array.isArray(),来判断是否是数组。
+      for (aryc of arguments[i]) {
+        res.push(aryc)
+      }
+    } else {
+      res.push(arguments[i])
+    }
+  }
+  return res
+}
+
+
+//跨台阶  一次只能跨一步或者两步
+function findStep(target) {
+  function find(start, history) {
+    if (start > target) {
+      return null
+    }
+    if (start === target) {
+      console.log(history)
+    }
+
+    find(start + 1, history + '[↗一步]')
+    find(start + 2, history + '[↗两步]')
+  }
+  return find(1, "1")
+}
+
+//加5乘3树
+function findSolution(target) {
+  function find(start, history) {
+    if (start > target) {
+      return null
+    }
+    if (start === target) {
+      console.log(history)
+    }
+    find(start + 5, '(' + history + ') + 5')
+    find(start * 3, '(' + history + ') * 3')
+  }
+  return find(1, "1")
+}
+
+
+//大整数相加 
+//add([2,2,2,2,2,2],[3,3,3,3,3,3])  返回[5, 5, 5, 5, 5, 5]
+function add(a, b) {
+  var x = ''
+    , y = ''
+    , c = 0
+  for (var i = 0; i < a.length; i++) {
+    x += a[i]
+  }
+  for (var i = 0; i < b.length; i++) {
+    y += b[i]
+  }
+  c = (+x) + (+y)
+  var m = c
+  var d = []
+  while (m > 9) {
+    d.unshift(m % 10)
+    if (m % 10 > 0) {
+      m = (m - (m % 10)) / 10
+    } else if (m % 10 === 0) {
+      m = m / 10
+    }
+  }
+  d.unshift(m)
+  return d
+}
+
+
+//【noi数组逆序存放】
+//return a new array
+function reverse(ary) {
+  var res = []
+  for (var i = 0; i < ary.length; i++) {
+    res.unshift(ary[i])
+  }
+  return res
+}
+//就地反转  no return
+function resverAryInPlace(ary) {
+  var l = (ary.length / 2) | 0
+  //按位或取整,没考虑语义
+  for (var i = 0; i < l; i++) {
+    var front = i
+    var end = ary.length - i - 1
+    var t = ary[front]
+    ary[front] = ary[end]
+    ary[end] = t
+  }
+}
+// 递归函数 先进后出，做到输入n个数并倒序输出
+//
+//递归一定要有结束条件
+//不是结束条件，分支要把问题往结束条件的方向递推
+//编写递归函数的时候，把递归函数当成普通函数并且认为它已经正确实现
+//想清楚递归函数的功能
+function inputAndReverse(n) {
+  if (n === 0) {
+    return
+  } else {
+    var v = prompt('请输入')
+    inputAndReverse(n - 1)
+    console.log(v)
+  }
+}
+
+//递归思路实现地上捡钱，哪条路线捡的多。
+var moneys = [
+       [4],
+      [3, 1],
+     [5, 6, 8],
+    [1, 8, 2, 9],
+  [4, 1, 7, 2, 9]
+]
+function maxMoney(ary, x, y) { //x y 代表上面第几行 第几个了
+  if (x === ary.length - 1) {
+    return ary[x][y]
+  } else { 
+    return ary[x][y] +Math.max(maxMoney(ary,x+1,y),maxMoney(ary,x+1,y+1))
+  }
 }
