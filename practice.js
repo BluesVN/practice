@@ -493,7 +493,7 @@ function findSolution(target) {
 }
 
 
-//大整数相加 
+//大整数相加 ，高精度加法，借用数组了。  此法太大丧失精度。
 //add([2,2,2,2,2,2],[3,3,3,3,3,3])  返回[5, 5, 5, 5, 5, 5]
 function add(a, b) {
   var x = ''
@@ -505,13 +505,13 @@ function add(a, b) {
   for (var i = 0; i < b.length; i++) {
     y += b[i]
   }
-  c = (+x) + (+y)
-  var m = c
+  c = (+x) + (+y)//这里字符串转number
+  var m = c //c是两者相加之和
   var d = []
   while (m > 9) {
     d.unshift(m % 10)
     if (m % 10 > 0) {
-      m = (m - (m % 10)) / 10
+      m = (m - (m % 10)) / 10    //这里把余位去掉
     } else if (m % 10 === 0) {
       m = m / 10
     }
@@ -519,6 +519,31 @@ function add(a, b) {
   d.unshift(m)
   return d
 }
+//另一种做法模拟演算，从个位一位位算，进位。此外还有高精度乘法等着你。
+function plus(a, b) {
+  var res = new Array(a.length > b.length ? a.length + 1 : b.length + 1) //先确定结果是个几位数
+  var i = a.length - 1
+  var j = b.length - 1
+  var k = res.length - 1   //下标要比第几位小1，i j k是我们要用到的下标
+
+  var s, r, carry = 0       //r余位，s两位相加的和，carry 进位/初次为0通常是1
+  while (a[i] !== undefined || b[j] !== undefined) {
+    s = (a[i] ? a[i] : 0) + (b[j] ? b[j] : 0) + carry
+    r = s % 10
+    carry = (s - r) / 10
+    res[k] = r  //这里如果res的第[0]号没机会赋值，默认给空。
+    i-- , j-- , k--        //下标统一向左移动
+  }
+  if (carry === 0) {
+    res.shift()
+  }
+  return res
+}
+//注意上面那个add的方法，巧用了字符串特性。但是在运算超大的数（超出边缘值）的时候是不精确的/测试最长28位。
+
+
+
+
 
 
 //【noi数组逆序存放】
@@ -560,16 +585,60 @@ function inputAndReverse(n) {
 
 //递归思路实现地上捡钱，哪条路线捡的多。
 var moneys = [
-       [4],
-      [3, 1],
-     [5, 6, 8],
-    [1, 8, 2, 9],
+  [4],
+  [3, 1],
+  [5, 6, 8],
+  [1, 8, 2, 9],
   [4, 1, 7, 2, 9]
 ]
 function maxMoney(ary, x, y) { //x y 代表上面第几行 第几个了
   if (x === ary.length - 1) {
     return ary[x][y]
-  } else { 
-    return ary[x][y] +Math.max(maxMoney(ary,x+1,y),maxMoney(ary,x+1,y+1))
+  } else {
+    return ary[x][y] + Math.max(maxMoney(ary, x + 1, y), maxMoney(ary, x + 1, y + 1))
   }
+}
+
+//noi校门外的树
+function trees(l, parts) {
+  var t = new Array(l + 1)
+  t.fill(1)
+  for (var part of parts) {
+    var start = part[0]
+    var end = part[1]
+    for (var j = start; j <= end; j++) {
+      t[j] = 0
+    }
+  }
+
+  var res = 0
+  for (var i = 0; i < t.length; i++) {
+    if (t[i]) {
+      res++
+    }
+  }
+  return res
+}
+
+//石头剪刀布，a b谁赢的多？
+function ztf(n, a, b) {//比n回合，a数组里面是a同学的组合规律一组。
+  var aw = 0   //a赢次数
+  var bw = 0
+  var am       //a的所有出拳记录
+  var bm
+  for (var i = 0, j = 0, k = 0; k < n; i++ , j++ , k++) {
+    am = a[i % a.length]
+    bm = b[i % b.length]
+
+    if (am === bm) {
+      //本次打平
+    } else if (am == 0) {
+      if (bm == 2) { aw++ } else if (bm == 5) { bw++ }
+    } else if (am == 2) {
+      if (bm == 0) { bw++ } else if (bm == 5) { aw++ }
+    } else if (am == 5) {
+      if (bm == 0) { aw++ } else if (bm == 2) { bw++ }
+    }
+  }
+  return aw > bw ? 'Awin' : 'Bwin'
 }
