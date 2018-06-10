@@ -3,8 +3,8 @@ var isPrime = function (n) {
   if (n === 1) {
     return false
   }
-  var m = Math.sqrt(n)
-  for (var i = 2; i < m; i++) {
+  var sqrt_n = Math.sqrt(n)
+  for (var i = 2; i <= sqrt_n; i++) {
     if (n % i == 0) {
       return false
     }
@@ -224,6 +224,52 @@ function isCompleteNum(n) {
   return false
 }
 
+//几次幂/次方  a的几次方等于b 取整(最接近的)
+function mi(a, b) {
+  var count = 0
+  var m = a
+  while (m <= b) {
+    m *= a
+    count++
+  }
+  return count
+}
+
+//power 的递归优化写法,2的100次方等于，2的50次方乘以2的50次方，少乘了很多次。
+function power(x, n) {
+  if (n === 0) {
+    return 1
+  }
+  if (n === 1) {
+    return x
+  }
+  var count=0
+  if (n % 2 === 0) {
+    var h = power(x, n / 2) 
+    return h * h
+  } else {
+    var h = power(x, (n - 1) / 2)
+    return h * h * x
+  }
+}
+
+
+
+//寻找能够整除1到n之间所有数的数。isPrime是求素数 上面写好了。
+function minDivider(n) {
+  var res = 1
+  for (let i = 2; i < n; i++) {
+    if (isPrime(i)) {//如果i是素数，才需要加入到乘积队列里
+      power = Math.floor(Math.log(n) / Math.log(i))   //把该素数的几次方加入到乘积队列呢？
+      if (power < 2 && power > 0) {
+        res *= i
+      } else {
+        res *= i ** power
+      }
+    }
+  }
+  return res
+}
 
 //阶乘和排列组合
 function factorial(n) {
@@ -254,17 +300,26 @@ function max() {
   return result
 }
 
-// 返回最小值
+// 返回最小值   input 1， 2， 3   output 1
 function min() {
   var len = arguments.length, result = Infinity
-  for (var i = 0; i < l; i++) {
+  for (var i = 0; i < len; i++) {
     if (result > arguments[i]) {
       result = arguments[i]
     }
   }
   return result
 }
-
+//min  上下一样 只不过一个用了ES6 一个用arguments
+function min2(...nums) {
+  var min = Infinity
+  for (var i = 0; i < nums.length; i++) {
+    if (nums[i] < min) {
+      min = num[i]
+    }
+  }
+  return min
+}
 
 
 
@@ -519,7 +574,7 @@ function add(a, b) {
   d.unshift(m)
   return d
 }
-//另一种做法模拟演算，从个位一位位算，进位。此外还有高精度乘法等着你。
+//另一种做法模拟演算，从个位一位位算，进位。此外还有高精度乘法等着你leetcode 43 Multiply Strings。python高精度运算
 function plus(a, b) {
   var res = new Array(a.length > b.length ? a.length + 1 : b.length + 1) //先确定结果是个几位数
   var i = a.length - 1
@@ -599,6 +654,27 @@ function maxMoney(ary, x, y) { //x y 代表上面第几行 第几个了
   }
 }
 
+//递归方式判断奇偶,爆栈写法
+function isEven(n) {
+  if (n === 0) {
+    return true
+  }
+  if (n === 1) {
+    return false
+  }
+  return isEven(n - 2)
+}
+
+//递归实现模运算， a%b,只考虑正数。 10%3 =  (10-3) %3
+function mod(a, b) {
+  if (a < b) {
+    return a
+  } else {
+    return mod(a - b, b)
+  }
+}
+
+
 //noi校门外的树
 function trees(l, parts) {
   var t = new Array(l + 1)
@@ -641,4 +717,35 @@ function ztf(n, a, b) {//比n回合，a数组里面是a同学的组合规律一�
     }
   }
   return aw > bw ? 'Awin' : 'Bwin'
+}
+
+
+//leetcode 771
+var numJewelsInStones = function (J, S) {
+  var aryJ = J.split('')
+  var count = 0
+
+  for (eachS of S) {
+    for (let i = 0; i < aryJ.length; i++) {
+      if (aryJ[i] === eachS) {
+        count++
+      }
+    }
+  }
+  return count
+};
+
+//求一个数 的质因数分解
+function factor(n) {
+  res = []
+  for (var i = 2; ; i++) {
+    if (n % i === 0) {
+      res.push(i)
+      n = n / i
+      i--
+      if (n === 1) {
+        return res
+      }
+    }
+  }
 }
