@@ -243,9 +243,9 @@ function power(x, n) {
   if (n === 1) {
     return x
   }
-  var count=0
+  var count = 0
   if (n % 2 === 0) {
-    var h = power(x, n / 2) 
+    var h = power(x, n / 2)
     return h * h
   } else {
     var h = power(x, (n - 1) / 2)
@@ -353,6 +353,19 @@ function fibb(n) {
   }
   return fibb(n - 1) + fibb(n - 2)
 }
+//缓存用过的fibb数组,因为递归找fibb数的时候 重复计算了好多次（前n项fibb和次）
+var cache = [0, 1, 1]
+function fibb(n) {
+  if (n in cache) {
+    return cache[n]
+  }
+  var r = fibb(n - 1) + fibb(n - 2)
+  cache[n] = r
+  return r
+}
+//上面可以用三元化简成一行
+
+
 
 //阶乘另一种写法
 function factorial2(n) {
@@ -749,3 +762,37 @@ function factor(n) {
     }
   }
 }
+
+//Counting Bits
+function countingBits(n) {
+  var res = new Array(n + 1)
+  res[0] = 0
+  if (n === 0) {
+    return res
+  }
+  var next_two_power = 1
+  var prev_two_power
+  for (let i = 1; i < res.length; i++) {
+    if (i == next_two_power) {
+      res[i] = 1
+      prev_two_power = next_two_power
+      next_two_power = next_two_power * 2
+    } else {
+      res[i] = res[i - prev_two_power] + 1
+    }
+  }
+  return res
+}
+
+//是否2的次方
+function isPowerTwo(n) {
+  return n > 0 && (n & (n - 1)) === 0
+}
+// 4的幂，首先要是2的幂，其次4的幂  按位与二进制基数位是1偶数位是0的数 等于零。因为四的幂，转换成二进制最左边基数位是1后面全是。 0b 0101010101010101010101010101010
+function isPowerOfFour(n) {
+  return n > 0 && ((n & (n - 1)) === 0) && ((n & 715827882) === 0)
+}
+//3的幂
+var isPowerOfThree = function (n) {
+  return n > 0 && 1162261467 % n == 0
+};
