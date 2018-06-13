@@ -796,3 +796,120 @@ function isPowerOfFour(n) {
 var isPowerOfThree = function (n) {
   return n > 0 && 1162261467 % n == 0
 };
+
+
+//Minimum Moves to Equal Array Elements,加即是减。
+function minMoves(nums) {
+  var count = 0
+  var min = Infinity
+  for (let i = 0; i < nums.length; i++) {
+    if (min > nums[i]) {
+      min = nums[i]
+    }
+  }
+  for (let i = 0; i < nums.length; i++) {
+    count += nums[i] - min
+  }
+  return count
+}
+//Hamming Distance 汉明距离
+function Hamming(x, y) {
+  var z = (x ^ y).toString(2)
+  var count = 0
+  for (var i = 0; i < z.length; i++) {
+    if (z[i] === '1') {
+      count++
+    }
+  }
+  return count
+}
+//不用字符串和循环
+function Hamming(x, y) {
+  var z = (x ^ y)
+  var count = 0
+  while (z > 0) {
+    if (z % 2 === 0) {
+      z = z / 2
+    } else {
+      z = (z - z % 2) / 2
+      count++
+    }
+  }
+  return count
+}
+//找没重复过的数， input [1,2,3,2,1]  output 3
+function singleNumber(nums) {
+  var res = nums[0]
+  for (var i = 1; i < nums.length; i++) {
+    res ^= nums[i]
+  }
+  return res
+}
+//原地0向后移动 
+var moveZeroes = function (nums) {
+  for (var i = 0, j = 0; j < nums.length; j++) {
+    if (nums[j] !== 0) {
+      nums[i] = nums[j]
+      i++
+    }
+  }
+  for (; i < nums.length; i++) {
+    nums[i] = 0
+  }
+};
+//35. Search Insert Position
+var searchInsert = function (nums, target) {
+  var left = 0
+  var right = nums.length - 1
+  var mid
+  if (nums.length === 0 || target <= nums[0]) {
+    return 0
+  }
+  if (target > nums[right]) {
+    return nums.length
+  }
+  if (target === nums[right]) {
+    return right
+  }
+  while (right - left > 1) {
+    mid = ((left + right) / 2) | 0
+    if (nums[mid] === target) {
+      return mid
+    } else if (nums[mid] < target) {
+      left = mid
+    } else {
+      right = mid
+    }
+  }
+  if (right - left === 1) {
+    return right
+  }
+};
+
+
+//two sum
+function twoSum(nums, target) {
+  var l = 0
+  var r = nums.length - 1
+  while (l < r) {
+    if (nums[l] + nums[r] === target) {
+      return [l, r]
+    } else if (nums[l] + nums[r] > target) {
+      r--
+    } else {
+      l++
+    }
+  }
+}
+//two sum 2
+function twoSum2(ary, target) {
+  var map = {}
+  for (var i = 0; i < ary.length; i++) {
+    var t2 = target - ary[i]
+    if (t2 in map) {
+      return [map[t2], i]
+    } else {
+      map[ary[i]] = i
+    }
+  }
+}
