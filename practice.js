@@ -901,7 +901,7 @@ function twoSum(nums, target) {
     }
   }
 }
-//two sum 22
+//two sum 2
 function twoSum2(ary, target) {
   var map = {}
   for (var i = 0; i < ary.length; i++) {
