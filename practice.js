@@ -12,13 +12,12 @@ var isPrime = function (n) {
   return true
 }
 
-//返回导函数
+//返回导函数，导函数的值 就是返回原函数f（x），在x点的斜率。
 var d = function (f) {
   return function (x) {
-    var x1 = x - 0.0000001
-    var x2 = x + 0.0000001
-    var y1 = f(x1)
-    var y2 = f(x2)
+    var delta = 1e-10//精度
+    var x1 = x - delta, y1 = f(x1)
+    var x2 = x + delta, y2 = f(x2)
     var k = (y2 - y1) / (x2 - x1)
     return k
   }
@@ -26,6 +25,7 @@ var d = function (f) {
 var f = function (x) {
   return x * x
 }
+// var f = x => x * x
 //返回导函数结束
 
 //水仙花数
@@ -354,6 +354,7 @@ function fibb(n) {
   return fibb(n - 1) + fibb(n - 2)
 }
 //缓存用过的fibb数组,因为递归找fibb数的时候 重复计算了好多次（前n项fibb和次）
+//这里cache可以不是全局变量，而作为函数的第二个参传递下去。这样函数执行结束后，会销毁。
 var cache = [0, 1, 1]
 function fibb(n) {
   if (n in cache) {
@@ -912,4 +913,31 @@ function twoSum2(ary, target) {
       map[ary[i]] = i
     }
   }
+}
+//leetcode 561
+var arrayPairSum = function (nums) {
+  //计算奇数项之和即可，让两个相近的数分为一组。
+  var nums = nums.sort()
+  var sum = 0;
+  var l = nums.length;
+  for (var i = 0; i < l; i = i + 2) {
+    sum += nums[i]
+  }
+  return sum
+};
+
+//
+// var f = x => x * x  ;sigma(f,1,10);
+function sigma(f, start, end) {
+  var sum = 0
+  for (let x = start; x <= end; x++) {
+    sum += f(x)
+  }
+  return sum
+}
+
+function sin(x) {
+  return sigma(function(n) {
+    return (-1) ** n * x ** (2 * n + 1) / factorial2(2 * n + 1)
+  }, 0, 100)
 }
