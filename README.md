@@ -1,4 +1,4 @@
 ## Welcome to my training ground
 * https://github.com/BluesVN/practice
 
-数与算法相关 个人日常练习
+### 有关数与算法的相关探索
